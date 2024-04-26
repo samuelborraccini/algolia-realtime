@@ -12,15 +12,12 @@ export class AppController {
 
   @Get('two/:term')
   async searchTerm2(@Param('term') term: string): Promise<movie[]> {
-    console.log('alo');
-
     const res = await this.algoliaService.search2(term);
     const { hits } = res;
     return hits;
   }
   @Get(':term')
   searchTerm(@Param('term') term: string): any {
-    console.log('dos');
     return this.algoliaService.search(term);
   }
 }

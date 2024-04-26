@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { AlgoliaResponse, movie } from './alogliaTypes';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AlgoliaService {
   private client: SearchClient;
   private index: SearchIndex;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.client = algoliasearch(
-      'W4XQ425LBQ',
-      'eed091e93b838e868a519f49e0fe8772',
+      this.configService.get<string>('ALGOLIA_APP_ID'),
+      this.configService.get<string>('ALGOLIA_KEY'),
     );
-    this.index = this.client.initIndex('myfirstindex');
+    this.index = this.client.initIndex(
+      this.configService.get<string>('ALGOLIA_INDEX'),
+    );
   }
 
   async search(query: string): Promise<any> {
